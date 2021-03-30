@@ -36,7 +36,7 @@ class Singly
     if ($this->head) {
       $currentNode = $this->head;
       $ctr = 0;
-      while ($currentNode->getNext() != null) {
+      while (true) {
         if ($ctr === $idx) {
           return $currentNode->getData();
         }
@@ -72,16 +72,14 @@ class Singly
     if ($this->head) {
       $currentNode = $this->head;
       $ctr = 0;
-      while ($currentNode->getNext() != null) {
+      while (true) {
         if ($ctr === $idx) {
           $currentNode->setData($value);
-          break;
+          return true;
         }
         $currentNode = $currentNode->getNext();
         $ctr++;
       }
-
-      return true;
     }
 
     return false;
@@ -109,7 +107,7 @@ class Singly
       $currentNode = $this->head;
       $prevNode = null;
       $ctr = 0;
-      while ($currentNode->getNext() != null) {
+      while (true) {
         if ($ctr === $idx) {
           if ($prevNode) {
             $prevNode->setNext($currentNode->getNext());

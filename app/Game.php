@@ -38,6 +38,7 @@ class Game
     {
         try {
             while (true) {
+                $this->reNewLandAndTerminal();
                 $input = $this->terminal->getChar();
                 $this->land->moveSnake($input);
                 $this->drawWorld();
@@ -45,6 +46,18 @@ class Game
             }
         } catch (GameException $exception) {
             $this->gameOver();
+        }
+    }
+
+    private function reNewLandAndTerminal()
+    {
+        $terminal = new Terminal();
+        if (
+            $terminal->getWidth() != $this->terminal->getWidth() &&
+            $terminal->getHeight() != $this->terminal->getHeight()
+        ) {
+            $this->terminal = $terminal;
+            $this->land = new Land(intval($terminal->getWidth()), intval($terminal->getHeight()) - 2);
         }
     }
 

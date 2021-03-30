@@ -35,7 +35,7 @@ class Char
      */
     public static function boxTopRight()
     {
-        return self::get('2551');
+        return self::get('2557');
     }
 
     /**
@@ -43,7 +43,7 @@ class Char
      */
     public static function boxBottomLeft()
     {
-        return self::get('255a');
+        return self::get('255A');
     }
 
     /**
@@ -51,7 +51,7 @@ class Char
      */
     public static function boxBottomRight()
     {
-        return self::get('255d');
+        return self::get('255D');
     }
 
     /**

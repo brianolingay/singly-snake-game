@@ -1,11 +1,14 @@
 {
-  "name": "singly/snake-game",
-  "autoload": {
-    "psr-4": {
-      "App\\": "app/"
+    "name": "singly/snake-game",
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        },
+        "files": [
+            "app/helper.php"
+        ]
+    },
+    "require": {
+        "php": ">=7.0.0"
     }
-  },
-  "require": {
-    "php": ">=7.0.0"
-  }
 }

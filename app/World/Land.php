@@ -8,6 +8,7 @@ use App\World\Element\Coin;
 use App\World\Element\Point;
 use App\LinkedList\Singly;
 use App\Terminal\Char;
+use DeepCopy\DeepCopy;
 
 class Land
 {
@@ -58,7 +59,7 @@ class Land
 
         $this->generateMap();
         $this->generateOutline();
-        $this->sourceMap = $this->map;
+        $this->sourceMap = deepClone($this->map);
 
         $this->applyElements();
     }
@@ -145,7 +146,7 @@ class Land
 
     private function applyElements()
     {
-        $this->map = $this->sourceMap;
+        $this->map = deepClone($this->sourceMap);
 
         foreach ($this->snake->getPoints() as $point) {
             $this->applyPoint($point);
