@@ -28,7 +28,7 @@ class Game
     public function __construct()
     {
         $this->terminal = new Terminal();
-        $this->land = new Land(intval($this->terminal->getWidth()), intval($this->terminal->getHeight()) - 2);
+        $this->land = new Land(intval($this->terminal->getWidth()), intval($this->terminal->getHeight()) - 3);
         $this->drawer = new Drawer(STDOUT);
 
         $this->drawWorld();

@@ -36,6 +36,8 @@ class Drawer
             $this->newLine();
         }
 
+        $this->displayScoreAndLevel($land->showScore());
+        $this->newLine();
         $this->showCursor();
     }
 
@@ -57,5 +59,16 @@ class Drawer
     private function showCursor()
     {
         fwrite($this->stream, Cursor::SHOW);
+    }
+
+    private function displayScoreAndLevel($score)
+    {
+        $level = 1;
+        $scorePerLevel = 10;
+        $levelToAdd = $score / $scorePerLevel;
+
+        $level += floor($levelToAdd);
+
+        fwrite($this->stream, "Score: {$score}, Level: {$level}");
     }
 }

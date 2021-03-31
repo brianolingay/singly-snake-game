@@ -89,6 +89,7 @@ class Land
         if (!empty($coins)) {
             foreach ($coins as $index => $coin) {
                 if ($head->overlaps($coin)) {
+                    $this->snake->addScore();
                     $this->snake->advance();
                     $this->coins->delete($index);
                     $this->randomCoins(1);
@@ -119,6 +120,11 @@ class Land
     public function getMap()
     {
         return $this->map->getList();
+    }
+
+    public function showScore()
+    {
+        return $this->snake->getScore();
     }
 
     public function updateMap($row, $col, $data)

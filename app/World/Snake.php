@@ -36,6 +36,9 @@ class Snake
      */
     private $lastPoint;
 
+    /** @var int */
+    private $score = 0;
+
     /**
      * @param int $landRows
      * @param int $landCols
@@ -163,5 +166,15 @@ class Snake
     public function setDirection(string $direction)
     {
         $this->direction = $direction;
+    }
+
+    public function addScore()
+    {
+        $this->score += 1;
+    }
+
+    public function getScore()
+    {
+        return $this->score;
     }
 }
