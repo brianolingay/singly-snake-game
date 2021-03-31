@@ -87,14 +87,14 @@ class Snake
         $landLessTwo = 2;
 
         if ($col >= $this->landCols - $landLessOne) {
-            $col = $landLessTwo;
-        } elseif ($col < $landLessTwo) {
+            $col = $landLessOne;
+        } elseif ($col < $landLessOne) {
             $col = $this->landCols - $landLessTwo;
         }
 
         if ($row >= $this->landRows - $landLessOne) {
-            $row = $landLessTwo;
-        } elseif ($row < $landLessTwo) {
+            $row = $landLessOne;
+        } elseif ($row < $landLessOne) {
             $row = $this->landRows - $landLessTwo;
         }
 

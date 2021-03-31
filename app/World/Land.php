@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\World;
 
+use App\Exception\GameException;
 use App\World\Element\Coin;
 use App\World\Element\Point;
 use App\LinkedList\Singly;
 use App\Terminal\Char;
-use DeepCopy\DeepCopy;
 
 class Land
 {
@@ -67,8 +67,8 @@ class Land
     public function randomCoins(int $count)
     {
         for ($i = 0; $i < $count; ++$i) {
-            $col = rand(1, $this->width - 2);
-            $row = rand(1, $this->height - 2);
+            $col = rand(2, $this->width - 3);
+            $row = rand(2, $this->height - 3);
 
             $this->coins->append(new Coin($row, $col));
         }
@@ -144,7 +144,8 @@ class Land
         $row = $this->height / 2;
 
         for ($i = 0; $i < $length; ++$i) {
-            $this->updateMap($row, $col, $text[$i]);
+            // var_dump($row, $col);
+            $this->updateMap(intval($row), intval($col), $text[$i]);
 
             ++$col;
         }
@@ -153,6 +154,8 @@ class Land
     private function applyElements()
     {
         $this->map = deepClone($this->sourceMap);
+
+        $this->checkCollision();
 
         foreach ($this->snake->getPoints() as $point) {
             $this->applyPoint($point);
@@ -164,6 +167,46 @@ class Land
                 $this->applyPoint($coin);
             }
         }
+    }
+
+    private function getBorder()
+    {
+        $width = $this->width;
+        $height = $this->height;
+
+        $widthLessOne = $width - 1;
+        $widthLessTwo = $width - 2;
+
+        $heightLessOne = $height - 1;
+        $heightLessTwo = $height - 2;
+
+        return [$widthLessOne, $widthLessTwo, $heightLessOne, $heightLessTwo];
+    }
+
+    /**
+     * @param Point $next
+     *
+     * @throws GameException
+     */
+    private function checkCollision()
+    {
+        $idxOne = 1;
+
+        list(
+            $widthLessOne,
+            $widthLessTwo,
+            $heightLessOne,
+            $heightLessTwo
+        ) = $this->getBorder();
+
+        $point = current($this->snake->getPoints());
+        // HLine
+        $this->checkHLineCollision($idxOne, $idxOne, $widthLessTwo, $point);
+        $this->checkHLineCollision($heightLessOne, $idxOne, $widthLessTwo, $point);
+
+        // VLine
+        $this->checkVLineCollision($idxOne, $idxOne, $heightLessTwo, $point);
+        $this->checkVLineCollision($widthLessOne, $idxOne, $heightLessTwo, $point);
     }
 
     /**
@@ -183,17 +226,15 @@ class Land
 
     private function generateOutline()
     {
-        $width = $this->width;
-        $height = $this->height;
-
-        $widthLessOne = $width - 1;
-        $widthLessTwo = $width - 2;
-
-        $heightLessOne = $height - 1;
-        $heightLessTwo = $height - 2;
-
         $idxZero = 0;
         $idxOne = 1;
+
+        list(
+            $widthLessOne,
+            $widthLessTwo,
+            $heightLessOne,
+            $heightLessTwo
+        ) = $this->getBorder();
 
         $this->updateMap($idxZero, $idxZero, Char::boxTopLeft());
         $this->updateMap($idxZero, $widthLessOne, Char::boxTopRight());
@@ -231,6 +272,32 @@ class Land
     {
         for ($i = 0; $i < $rows; ++$i) {
             $this->updateMap($start + $i, $col, $char);
+        }
+    }
+
+    /**
+     * @param int    $row
+     * @param int    $start
+     * @param int    $cols
+     * @param string $char
+     */
+    private function checkHLineCollision(int $row, int $start, int $cols, Point $point)
+    {
+        for ($i = 0; $i < $cols; ++$i) {
+            $col = $start + $i;
+            if ($row == $point->getRow() && $col == $point->getCol()) {
+                throw GameException::snakeCollision();
+            }
+        }
+    }
+
+    private function checkVLineCollision(int $col, int $start, int $rows, Point $point)
+    {
+        for ($i = 0; $i < $rows; ++$i) {
+            $row = $start + $i;
+            if ($row == $point->getRow() && $col == $point->getCol()) {
+                throw GameException::snakeCollision();
+            }
         }
     }
 }

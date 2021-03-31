@@ -63,11 +63,7 @@ class Drawer
 
     private function displayScoreAndLevel($score)
     {
-        $level = 1;
-        $scorePerLevel = 10;
-        $levelToAdd = $score / $scorePerLevel;
-
-        $level += floor($levelToAdd);
+        $level = computeLevel($score) + 1;
 
         fwrite($this->stream, "Score: {$score}, Level: {$level}");
     }

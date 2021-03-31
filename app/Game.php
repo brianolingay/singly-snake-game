@@ -25,6 +25,11 @@ class Game
      */
     private $drawer;
 
+    /**
+     * @var int
+     */
+    private $speed = 50000;
+
     public function __construct()
     {
         $this->terminal = new Terminal();
@@ -42,7 +47,7 @@ class Game
                 $input = $this->terminal->getChar();
                 $this->land->moveSnake($input);
                 $this->drawWorld();
-                usleep(60000);
+                usleep($this->getSpeed());
             }
         } catch (GameException $exception) {
             $this->gameOver();
@@ -70,5 +75,25 @@ class Game
     private function drawWorld()
     {
         $this->drawer->draw($this->land);
+    }
+
+    private function getSpeed()
+    {
+        $reduction = 10000;
+        $fastest = 1000;
+        $level = computeLevel($this->land->showScore());
+
+        if ($level > 0) {
+            $totalReduction = $reduction * $level;
+            $newSpeed = $this->speed - $totalReduction;
+
+            if ($newSpeed < $fastest) {
+                return $fastest;
+            }
+
+            return intval($newSpeed);
+        }
+
+        return $this->speed;
     }
 }
