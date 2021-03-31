@@ -84,7 +84,7 @@ class Snake
         }
 
         $landLessOne = 1;
-        $landLessTwo = 2;
+        $landLessTwo = 1;
 
         if ($col >= $this->landCols - $landLessOne) {
             $col = $landLessOne;
@@ -107,6 +107,7 @@ class Snake
 
         $this->points->prepend($next);
         $this->lastPoint = $this->points->last();
+        $this->points->deleteLast();
     }
 
     /**

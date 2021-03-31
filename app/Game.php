@@ -28,7 +28,7 @@ class Game
     /**
      * @var int
      */
-    private $speed = 50000;
+    private $speed = 100000;
 
     public function __construct()
     {

@@ -5,11 +5,11 @@ PHP Snake Game implemented using Singly Linked List
 
 - [x] Using singly.
   - [x] Random Coin
-  - [ ] Snake
-  - [ ] World
+  - [x] Snake
+  - [x] World
 - [x] Responsive world layout
 - [x] Show score and level in the screen.
 - [x] Game speed increments every after 10 points.
-- [ ] Game over when snake collides with self or border.
+- [x] Game over when snake collides with self or border.
   - [x] Border
   - [ ] Snake
