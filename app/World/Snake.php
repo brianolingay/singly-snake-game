@@ -83,29 +83,16 @@ class Snake
                 break;
         }
 
-        $landLessOne = 1;
-        $landLessTwo = 1;
-
-        if ($col >= $this->landCols - $landLessOne) {
-            $col = $landLessOne;
-        } elseif ($col < $landLessOne) {
-            $col = $this->landCols - $landLessTwo;
-        }
-
-        if ($row >= $this->landRows - $landLessOne) {
-            $row = $landLessOne;
-        } elseif ($row < $landLessOne) {
-            $row = $this->landRows - $landLessTwo;
-        }
-
         $point->setChar(Char::shadeBlock());
         $this->points->updateSpecificNode(0, $point);
 
         $next = new Point($row, $col, Char::block());
 
         $this->checkCollision($next);
+        $this->checkBoundCollision($next);
 
         $this->points->prepend($next);
+
         $this->lastPoint = $this->points->last();
         $this->points->deleteLast();
     }
@@ -117,8 +104,56 @@ class Snake
      */
     private function checkCollision(Point $next)
     {
-        foreach ($this->points as $point) {
+        foreach ($this->points->getList() as $point) {
             if ($point->overlaps($next)) {
+                throw GameException::snakeCollision();
+            }
+        }
+    }
+
+    private function checkBoundCollision(Point $next)
+    {
+        $width = $this->landCols;
+        $height = $this->landRows;
+
+        $widthLessOne = $width - 1;
+        $widthLessTwo = $width - 2;
+
+        $heightLessOne = $height - 1;
+        $heightLessTwo = $height - 2;
+
+        $idxOne = 1;
+
+        // HLine
+        $this->checkHLineCollision($idxOne, $idxOne, $widthLessTwo, $next);
+        $this->checkHLineCollision($heightLessOne, $idxOne, $widthLessTwo, $next);
+
+        // VLine
+        $this->checkVLineCollision($idxOne, $idxOne, $heightLessTwo, $next);
+        $this->checkVLineCollision($widthLessOne, $idxOne, $heightLessTwo, $next);
+    }
+
+    /**
+     * @param int    $row
+     * @param int    $start
+     * @param int    $cols
+     * @param string $char
+     */
+    private function checkHLineCollision(int $row, int $start, int $cols, Point $point)
+    {
+        for ($i = 0; $i < $cols; ++$i) {
+            $col = $start + $i;
+            if ($row == $point->getRow() && $col == $point->getCol()) {
+                throw GameException::snakeCollision();
+            }
+        }
+    }
+
+    private function checkVLineCollision(int $col, int $start, int $rows, Point $point)
+    {
+        for ($i = 0; $i < $rows; ++$i) {
+            $row = $start + $i;
+            if ($row == $point->getRow() && $col == $point->getCol()) {
                 throw GameException::snakeCollision();
             }
         }

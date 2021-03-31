@@ -155,8 +155,6 @@ class Land
     {
         $this->map = deepClone($this->sourceMap);
 
-        $this->checkCollision();
-
         foreach ($this->snake->getPoints() as $point) {
             $this->applyPoint($point);
         }
@@ -167,46 +165,6 @@ class Land
                 $this->applyPoint($coin);
             }
         }
-    }
-
-    private function getBorder()
-    {
-        $width = $this->width;
-        $height = $this->height;
-
-        $widthLessOne = $width - 1;
-        $widthLessTwo = $width - 2;
-
-        $heightLessOne = $height - 1;
-        $heightLessTwo = $height - 2;
-
-        return [$widthLessOne, $widthLessTwo, $heightLessOne, $heightLessTwo];
-    }
-
-    /**
-     * @param Point $next
-     *
-     * @throws GameException
-     */
-    private function checkCollision()
-    {
-        $idxOne = 1;
-
-        list(
-            $widthLessOne,
-            $widthLessTwo,
-            $heightLessOne,
-            $heightLessTwo
-        ) = $this->getBorder();
-
-        $point = current($this->snake->getPoints());
-        // HLine
-        $this->checkHLineCollision($idxOne, $idxOne, $widthLessTwo, $point);
-        $this->checkHLineCollision($heightLessOne, $idxOne, $widthLessTwo, $point);
-
-        // VLine
-        $this->checkVLineCollision($idxOne, $idxOne, $heightLessTwo, $point);
-        $this->checkVLineCollision($widthLessOne, $idxOne, $heightLessTwo, $point);
     }
 
     /**
@@ -229,12 +187,14 @@ class Land
         $idxZero = 0;
         $idxOne = 1;
 
-        list(
-            $widthLessOne,
-            $widthLessTwo,
-            $heightLessOne,
-            $heightLessTwo
-        ) = $this->getBorder();
+        $width = $this->width;
+        $height = $this->height;
+
+        $widthLessOne = $width - 1;
+        $widthLessTwo = $width - 2;
+
+        $heightLessOne = $height - 1;
+        $heightLessTwo = $height - 2;
 
         $this->updateMap($idxZero, $idxZero, Char::boxTopLeft());
         $this->updateMap($idxZero, $widthLessOne, Char::boxTopRight());
@@ -272,32 +232,6 @@ class Land
     {
         for ($i = 0; $i < $rows; ++$i) {
             $this->updateMap($start + $i, $col, $char);
-        }
-    }
-
-    /**
-     * @param int    $row
-     * @param int    $start
-     * @param int    $cols
-     * @param string $char
-     */
-    private function checkHLineCollision(int $row, int $start, int $cols, Point $point)
-    {
-        for ($i = 0; $i < $cols; ++$i) {
-            $col = $start + $i;
-            if ($row == $point->getRow() && $col == $point->getCol()) {
-                throw GameException::snakeCollision();
-            }
-        }
-    }
-
-    private function checkVLineCollision(int $col, int $start, int $rows, Point $point)
-    {
-        for ($i = 0; $i < $rows; ++$i) {
-            $row = $start + $i;
-            if ($row == $point->getRow() && $col == $point->getCol()) {
-                throw GameException::snakeCollision();
-            }
         }
     }
 }

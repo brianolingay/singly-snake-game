@@ -12,4 +12,4 @@ PHP Snake Game implemented using Singly Linked List
 - [x] Game speed increments every after 10 points.
 - [x] Game over when snake collides with self or border.
   - [x] Border
-  - [ ] Snake
+  - [x] Snake
